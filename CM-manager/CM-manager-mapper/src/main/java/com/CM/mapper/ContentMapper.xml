@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.CM.mapper.ContentMapper" >
   <resultMap id="BaseResultMap" type="com.CM.pojo.Content" >
-    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="id" property="id" jdbcType="INTEGER" />
     <result column="category_id" property="categoryId" jdbcType="INTEGER" />
     <result column="title" property="title" jdbcType="VARCHAR" />
     <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
@@ -87,16 +87,6 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from content
-    where id = #{id,jdbcType=BIGINT}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from content
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
   <delete id="deleteByExample" parameterType="com.CM.pojo.ContentExample" >
     delete from content
     <if test="_parameter != null" >
@@ -108,7 +98,7 @@
       sub_title, url, pic, 
       pic2, created, updated
       )
-    values (#{id,jdbcType=BIGINT}, #{categoryId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=INTEGER}, #{categoryId,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, 
       #{subTitle,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, #{pic,jdbcType=VARCHAR}, 
       #{pic2,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}, #{updated,jdbcType=TIMESTAMP}
       )
@@ -146,7 +136,7 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+        #{id,jdbcType=INTEGER},
       </if>
       <if test="categoryId != null" >
         #{categoryId,jdbcType=INTEGER},
@@ -184,7 +174,7 @@
     update content
     <set >
       <if test="record.id != null" >
-        id = #{record.id,jdbcType=BIGINT},
+        id = #{record.id,jdbcType=INTEGER},
       </if>
       <if test="record.categoryId != null" >
         category_id = #{record.categoryId,jdbcType=INTEGER},
@@ -217,7 +207,7 @@
   </update>
   <update id="updateByExample" parameterType="map" >
     update content
-    set id = #{record.id,jdbcType=BIGINT},
+    set id = #{record.id,jdbcType=INTEGER},
       category_id = #{record.categoryId,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
       sub_title = #{record.subTitle,jdbcType=VARCHAR},
@@ -229,47 +219,5 @@
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.CM.pojo.Content" >
-    update content
-    <set >
-      <if test="categoryId != null" >
-        category_id = #{categoryId,jdbcType=INTEGER},
-      </if>
-      <if test="title != null" >
-        title = #{title,jdbcType=VARCHAR},
-      </if>
-      <if test="subTitle != null" >
-        sub_title = #{subTitle,jdbcType=VARCHAR},
-      </if>
-      <if test="url != null" >
-        url = #{url,jdbcType=VARCHAR},
-      </if>
-      <if test="pic != null" >
-        pic = #{pic,jdbcType=VARCHAR},
-      </if>
-      <if test="pic2 != null" >
-        pic2 = #{pic2,jdbcType=VARCHAR},
-      </if>
-      <if test="created != null" >
-        created = #{created,jdbcType=TIMESTAMP},
-      </if>
-      <if test="updated != null" >
-        updated = #{updated,jdbcType=TIMESTAMP},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.CM.pojo.Content" >
-    update content
-    set category_id = #{categoryId,jdbcType=INTEGER},
-      title = #{title,jdbcType=VARCHAR},
-      sub_title = #{subTitle,jdbcType=VARCHAR},
-      url = #{url,jdbcType=VARCHAR},
-      pic = #{pic,jdbcType=VARCHAR},
-      pic2 = #{pic2,jdbcType=VARCHAR},
-      created = #{created,jdbcType=TIMESTAMP},
-      updated = #{updated,jdbcType=TIMESTAMP}
-    where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>

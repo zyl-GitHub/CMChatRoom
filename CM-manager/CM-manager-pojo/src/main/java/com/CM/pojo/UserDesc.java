@@ -1,7 +1,5 @@
 package com.CM.pojo;
 
-import java.util.Date;
-
 public class UserDesc {
     private Integer id;
 
@@ -12,8 +10,6 @@ public class UserDesc {
     private String address;
 
     private String post;
-
-    private Date created;
 
     public Integer getId() {
         return id;
@@ -53,13 +49,5 @@ public class UserDesc {
 
     public void setPost(String post) {
         this.post = post == null ? null : post.trim();
-    }
-
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
     }
 }

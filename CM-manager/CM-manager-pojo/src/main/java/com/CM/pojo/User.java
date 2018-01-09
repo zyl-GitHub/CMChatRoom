@@ -1,5 +1,7 @@
 package com.CM.pojo;
 
+import java.util.Date;
+
 public class User {
     private Integer id;
 
@@ -22,6 +24,8 @@ public class User {
     private Integer typeId;
 
     private String sign;
+
+    private Date created;
 
     public Integer getId() {
         return id;
@@ -109,5 +113,13 @@ public class User {
 
     public void setSign(String sign) {
         this.sign = sign == null ? null : sign.trim();
+    }
+
+    public Date getCreated() {
+        return created;
+    }
+
+    public void setCreated(Date created) {
+        this.created = created;
     }
 }

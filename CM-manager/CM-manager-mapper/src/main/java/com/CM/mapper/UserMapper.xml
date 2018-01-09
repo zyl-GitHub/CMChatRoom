@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.CM.mapper.UserMapper" >
   <resultMap id="BaseResultMap" type="com.CM.pojo.User" >
-    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="id" property="id" jdbcType="INTEGER" />
     <result column="user_id" property="userId" jdbcType="VARCHAR" />
     <result column="password" property="password" jdbcType="VARCHAR" />
     <result column="name" property="name" jdbcType="VARCHAR" />
@@ -13,6 +13,7 @@
     <result column="email" property="email" jdbcType="VARCHAR" />
     <result column="type_id" property="typeId" jdbcType="INTEGER" />
     <result column="sign" property="sign" jdbcType="VARCHAR" />
+    <result column="created" property="created" jdbcType="TIMESTAMP" />
   </resultMap>
   <sql id="Example_Where_Clause" >
     <where >
@@ -73,7 +74,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List" >
-    id, user_id, password, name, nickname, sex, age, phone, email, type_id, sign
+    id, user_id, password, name, nickname, sex, age, phone, email, type_id, sign, created
   </sql>
   <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.CM.pojo.UserExample" >
     select
@@ -89,16 +90,6 @@
       order by ${orderByClause}
     </if>
   </select>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 
-    <include refid="Base_Column_List" />
-    from user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
   <delete id="deleteByExample" parameterType="com.CM.pojo.UserExample" >
     delete from user
     <if test="_parameter != null" >
@@ -109,11 +100,13 @@
     insert into user (id, user_id, password, 
       name, nickname, sex, 
       age, phone, email, 
-      type_id, sign)
+      type_id, sign, created
+      )
     values (#{id,jdbcType=INTEGER}, #{userId,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
       #{name,jdbcType=VARCHAR}, #{nickname,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
       #{age,jdbcType=INTEGER}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
-      #{typeId,jdbcType=INTEGER}, #{sign,jdbcType=VARCHAR})
+      #{typeId,jdbcType=INTEGER}, #{sign,jdbcType=VARCHAR}, #{created,jdbcType=TIMESTAMP}
+      )
   </insert>
   <insert id="insertSelective" parameterType="com.CM.pojo.User" >
     insert into user
@@ -151,6 +144,9 @@
       <if test="sign != null" >
         sign,
       </if>
+      <if test="created != null" >
+        created,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -185,6 +181,9 @@
       </if>
       <if test="sign != null" >
         #{sign,jdbcType=VARCHAR},
+      </if>
+      <if test="created != null" >
+        #{created,jdbcType=TIMESTAMP},
       </if>
     </trim>
   </insert>
@@ -230,6 +229,9 @@
       <if test="record.sign != null" >
         sign = #{record.sign,jdbcType=VARCHAR},
       </if>
+      <if test="record.created != null" >
+        created = #{record.created,jdbcType=TIMESTAMP},
+      </if>
     </set>
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
@@ -247,59 +249,10 @@
       phone = #{record.phone,jdbcType=VARCHAR},
       email = #{record.email,jdbcType=VARCHAR},
       type_id = #{record.typeId,jdbcType=INTEGER},
-      sign = #{record.sign,jdbcType=VARCHAR}
+      sign = #{record.sign,jdbcType=VARCHAR},
+      created = #{record.created,jdbcType=TIMESTAMP}
     <if test="_parameter != null" >
       <include refid="Update_By_Example_Where_Clause" />
     </if>
-  </update>
-  <update id="updateByPrimaryKeySelective" parameterType="com.CM.pojo.User" >
-    update user
-    <set >
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=VARCHAR},
-      </if>
-      <if test="password != null" >
-        password = #{password,jdbcType=VARCHAR},
-      </if>
-      <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
-      </if>
-      <if test="nickname != null" >
-        nickname = #{nickname,jdbcType=VARCHAR},
-      </if>
-      <if test="sex != null" >
-        sex = #{sex,jdbcType=VARCHAR},
-      </if>
-      <if test="age != null" >
-        age = #{age,jdbcType=INTEGER},
-      </if>
-      <if test="phone != null" >
-        phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="email != null" >
-        email = #{email,jdbcType=VARCHAR},
-      </if>
-      <if test="typeId != null" >
-        type_id = #{typeId,jdbcType=INTEGER},
-      </if>
-      <if test="sign != null" >
-        sign = #{sign,jdbcType=VARCHAR},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.CM.pojo.User" >
-    update user
-    set user_id = #{userId,jdbcType=VARCHAR},
-      password = #{password,jdbcType=VARCHAR},
-      name = #{name,jdbcType=VARCHAR},
-      nickname = #{nickname,jdbcType=VARCHAR},
-      sex = #{sex,jdbcType=VARCHAR},
-      age = #{age,jdbcType=INTEGER},
-      phone = #{phone,jdbcType=VARCHAR},
-      email = #{email,jdbcType=VARCHAR},
-      type_id = #{typeId,jdbcType=INTEGER},
-      sign = #{sign,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=INTEGER}
   </update>
 </mapper>
