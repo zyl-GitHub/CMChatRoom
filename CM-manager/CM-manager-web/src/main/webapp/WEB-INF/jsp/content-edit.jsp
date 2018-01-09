@@ -38,12 +38,6 @@
 	            	<a href="javascript:void(0)" class="easyui-linkbutton onePicUpload">图片上传</a>
 	            </td>
 	        </tr>
-	        <tr>
-	            <td>内容:</td>
-	            <td>
-	                <textarea style="width:800px;height:300px;visibility:hidden;" name="content"></textarea>
-	            </td>
-	        </tr>
 	    </table>
 	</form>
 	<div style="padding:5px">
@@ -66,7 +60,7 @@ var contentEditPage = {
 			}
 			contentEditEditor.sync();
 			
-			$.post("/rest/content/edit",$("#contentEditForm").serialize(), function(data){
+			$.post("/content/edit",$("#contentEditForm").serialize(), function(data){
 				if(data.status == 200){
 					$.messager.alert('提示','新增内容成功!');
 					$("#contentList").datagrid("reload");
