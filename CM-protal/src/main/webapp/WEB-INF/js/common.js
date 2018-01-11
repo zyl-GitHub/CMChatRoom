@@ -25,9 +25,7 @@ var TT = TAOTAO = {
 		//指定上传文件参数名称
 		filePostName  : "uploadFile",
 		//指定上传文件请求的url。
-		uploadJson : '/pic/upload',
-		//上传类型，分别为image、flash、media、file
-		dir : "image"
+		uploadJson : '/chat/upload'
 	},
 	// 格式化时间
 	formatDateTime : function(val,row){
@@ -59,6 +57,7 @@ var TT = TAOTAO = {
     init : function(data){
     	// 初始化图片上传组件
     	this.initPicUpload(data);
+    	this.initFileUpload(data);
     	// 初始化选择类目组件
     	this.initItemCat(data);
     },
@@ -101,7 +100,27 @@ var TT = TAOTAO = {
         	});
     	});
     },
-    
+ // 初始化文件上传组件
+    initFileUpload : function(data){
+    	$(".fileUpload").each(function(i,e){
+    		var _ele = $(e);
+        	//给“上传文件按钮”绑定click事件
+        	$(e).click(function(){
+        		var form = $(this).parentsUntil("form").parent("form");
+        		//打开图片上传窗口
+        		KindEditor.editor(TT.kingEditorParams).loadPlugin('insertfile',function(){
+        			var editor = this;
+        			editor.plugin.fileDialog({
+        				//选择查看的指定文件夹下的文件【包括子目录下的文件】，默认只能是image,flash,media,file四种，如需添加自定义文件夹，可修改例如：asp/file_manager_json.asp文件第40行。 
+        				clickFn : function(url, title) { //选择完文件后执行下面的代码 
+        				$('#url').val(url); 
+        				editor.hideDialog(); //隐藏浏览服务器对话框 
+        				} 
+					});
+        		});
+        	});
+    	});
+    },
     // 初始化选择类目组件
     initItemCat : function(data){
     	$(".selectItemCat").each(function(i,e){
