@@ -22,11 +22,10 @@
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**"/>
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**"/>
 	<mvc:resources location="/WEB-INF/images/" mapping="/images/**"/>
-	<!--  <mvc:interceptors>
+	<mvc:interceptors>
 		<mvc:interceptor>
-			<mvc:mapping path="/order/**"/>
+			<mvc:mapping path="/chat/main"/>
 			<bean class="com.CM.protal.LoginInterceptor"></bean>
 		</mvc:interceptor>
 	</mvc:interceptors>
-	-->
 </beans> 

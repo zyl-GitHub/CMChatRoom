@@ -3,9 +3,12 @@
 
 <html>
 <head>
+<meta http-equiv="Content-Type" content="text/html; UTF-8">
 <title>聊天室</title>
-<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/themes/default/easyui.css" />
-<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/themes/icon.css" />
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/themes/metro/easyui.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/themes/icon.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/themes/color.css">
+<link rel="stylesheet" type="text/css" href="/js/jquery-easyui-1.4.1/easyui/demo/demo.css">
 <link rel="stylesheet" type="text/css" href="/css/style.css" />
 <script type="text/javascript" charset="utf-8" src="/js/kindeditor-4.1.10/kindeditor-all-min.js"></script>
 <script type="text/javascript" charset="utf-8" src="/js/kindeditor-4.1.10/lang/zh_CN.js"></script>
@@ -33,22 +36,21 @@ $(function(){
 	function check(){
 		var userId = ${user.userId};
 		$.post("/chat/user/check?userId="+userId,function(data){
-			if(data == 200){
+			if(data == 500){
 				// 提示用户下线了
 				alert("用户已经被踢下线了!");
 				// 回到登录页面!
-				window.location.href="/chat/user/login";
+				window.location.href="/chat/main";
 			}
 		});
 	}
 	//退出
 	function exit(){
 		var userId = ${user.userId};
-		$.post("/chat/user/loginout?userId="+userId,function(data){
+		$.post("/chat/user/loginOut?userId="+userId,function(data){
 			if(data.status  == 200)
 			{
-				alert("欢迎您下次光临！");
-				window.location.href="/chat/user/login";
+				window.location.href="/chat/main";
 			}
 		});
 	}
@@ -63,10 +65,10 @@ $(function(){
 var userIdc;
 var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之语聊天室，请遵守聊天室规则，不要使用不文明用语。</span><br><span style='line-height:22px;'>";var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之语聊天室，请遵守聊天室规则，不要使用不文明用语。</span><br><span style='line-height:22px;'>";
 	//更新信息
-	//window.setInterval("showAllContent();",1000);
-	//window.setInterval("showPersonContent();",1000);
-	//window.setInterval("showOnLine();",10000);
-	//window.setInterval("check();",1000);
+	window.setInterval("showAllContent();",1000);
+	window.setInterval("showPersonContent();",1000);
+	window.setInterval("showOnLine();",2000);
+	window.setInterval("check();",5000);
 
 	$(function(){
 		showAllContent();
@@ -76,14 +78,14 @@ var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之
 	
 	// 显示群聊聊天的内容
 	function showAllContent(){
-		$.post("/chat/content/showAllMessage?"+new Date().getTime(),function(data){
+		$.post("/chat/content/showAllMessage?"+new Date().getTime(),{userId:'${user.userId}'},function(data){
 			if(data.status == 200)
 			{
 				//name+*@*$+msg
 				var message = data.data;
 				var userId = ${user.userId};
-				var name = message.split('*@*&')[0];
-				var msg = message.split('*@*&')[1];			
+				var name = message.split('@')[0];
+				var msg = message.split('@')[1];			
 				var tabs = $("#tabs");
 				var tab = tabs.tabs("getTab",name);
 				if(tab){
@@ -92,26 +94,26 @@ var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之
 					tabs.tabs('add',{
 					    title:name,
 					    id:userId,
-					    content:"<table><tr><td width=600px height=290px><div id="+userId+"content width=600px height=290px overflow-y:auto></div></td></tr></table>",
+					    content:"<table><tr><td width=600px height=290px><div id="+userId+"content width=600px height=290px style='postion:relative;overflow:auto'></div></td></tr></table>",
 					    closable:true,
 					    bodyCls:"content"
 					});
 				}
-				var history = $("#"+userId+"content").text();
+				var history = $("#"+userId+"content").html();
 				$("#"+userId+"content").html(history+msg);
 			}
 		});
 	}
 	//显示私聊
 	function showPersonContent(){
-		$.post("/chat/content/showPersonMessage?"+new Date().getTime(),function(data){
+		$.post("/chat/content/showPersonMessage?"+new Date().getTime(),{userId:'${user.userId}'},function(data){
 			if(data.status == 200)
 			{
 				//userId+*@*$+name+*@*$+msg
 				var message = data.data;
-				var userId = message.split('*@*&')[0];
-				var name = message.split('*@*&')[1];
-				var msg = message.split('*@*&')[2];
+				var userId = message.split('@')[0];
+				var name = message.split('@')[1];
+				var msg = message.split('@')[2];
 				
 				var tabs = $("#tabs");
 				var tab = tabs.tabs("getTab",name);
@@ -126,19 +128,38 @@ var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之
 					    bodyCls:"content"
 					});
 				}
-				var history = $("#"+userId+"content").text();
+				var history = $("#"+userId+"content").html();
 				$("#"+userId+"content").html(history+msg);
 			}
 		});
 	}
+	//获得当前时间
+	function getNowFormatDate() {
+	    var date = new Date();
+	    var seperator1 = "-";
+	    var seperator2 = ":";
+	    var month = date.getMonth() + 1;
+	    var strDate = date.getDate();
+	    if (month >= 1 && month <= 9) {
+	        month = "0" + month;
+	    }
+	    if (strDate >= 0 && strDate <= 9) {
+	        strDate = "0" + strDate;
+	    }
+	    var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+	            + " " + date.getHours() + seperator2 + date.getMinutes()
+	            + seperator2 + date.getSeconds();
+	    return currentdate;
+	}
 	//点击发送消息按钮
 	function send(){
 		itemAddEditor.sync();
-		//拼接message  未完成
+		
 		if($('#desc').val()==""){
 			return false;
 		}
-		var value = $('#desc').val();
+		//拼接message  未完成
+		var value = "<div><span style='color:green'>"+getNowFormatDate()+":</span><span style='color:red'>${user.name}</span></br>"+$('#desc').val()+"</div></br>";		
 		itemAddEditor.html('');
 		var tab = $('#tabs').tabs('getSelected'); 
 		var userIdc = tab.panel('options').id;
@@ -146,20 +167,22 @@ var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之
 		//群聊
 		if(userIdc == '${user.userId}')
 		{
-			//'0'+useId(发送方id)+message 发送到后端
-			message = '0'+"*@*&"+userIdc+"*@*&"+value;
+			//'0'+useId(发送方id)+发送方的姓名+message 发送到后端
+			message = '0'+"@"+userIdb+"@"+'${user.name}'+"@"+value;
 		}
 		//私聊
 		else
 		{
-			//1+userId(发送方Id)+userId(接收方Id)+message 发送到后端
-			message = '1'+"*@*&"+userIdb+"*@*"+${user.name}+"*@*&"+userIdc+"*@*&"+value;
+			var history = $("#"+userIdc+"content").html();
+			$("#"+userIdc+"content").html(history+value);
+			//1+userId(发送方Id)+发送方姓名+userId(接收方Id)+message 发送到后端
+			message = '1'+"@"+userIdb+"@"+'${user.name}'+"@"+userIdc+"@"+value;
 		}
-		alert(message);
 		// $("#form1").serialize():让表单中所有的元素都提交.
 		// jquery提交数据.{id:1,name:aa,age:25}
+		
 		$.post("/chat/content/sendMessage?"+new Date().getTime(),{message:message},function(data){
-			//$("#content").html(sysBBS+data+"</span>");
+			//$("#content").html((history+value);
 		});
 	}
 	
@@ -212,7 +235,7 @@ $(function(){
 					tabs.tabs('add',{
 					    title:node.text,
 					    id:node.id,
-					    content:"<table><tr><td width=600px height=290px><div id="+node.id+"content width=600px height=290px overflow-y:auto></div></td></tr></table>",
+					    content:"<table><tr><td width=600px height=290px><div id="+node.id+"content width=600px height=290px style='position:relative;overflow:auto'></div></td></tr></table>",
 					    closable:true,
 					    bodyCls:"content"
 					});
@@ -299,7 +322,7 @@ function menuHandler(item){
 		   				 	<table>
 		   				 		<tr>
 		   				 			<td width=600px height=250px>
-		   				 				<div width=600px height=250px id="${user.userId}content" overflow-y:auto>
+		   				 				<div width=600px height=250px id="${user.userId}content" style='overflow-y:auto'>
 		   				 					
 		   				 				</div>
 		   				 			</td>
@@ -320,8 +343,8 @@ function menuHandler(item){
 	        <tr>
 	            <td>
 	                <textarea style="width:800px;height:300px;visibility:hidden;" name="desc" id='desc'></textarea>
-	                <input name="Submit2" type="button" class="btn_grey" value="发送" onClick="send()()">
-				    <input name="button_exit" type="button" class="btn_grey" value="退出聊天室" onClick="exit()()">
+	                <input name="Submit2" type="button" class="btn_grey" value="发送" onClick="send()">
+				    <input name="button_exit" type="button" class="btn_grey" value="退出聊天室" onClick="exit()">
 	            	 <a href="javascript:void(0)" class="easyui-linkbutton fileUpload">上传文件</a>
 	                 <input type="hidden" name="image"/>
 	            </td>
@@ -343,7 +366,7 @@ function menuHandler(item){
 			<tr>
 				<td align="center">${file.name}</td>
 				<td align="center">${file.link}</td>
-				<td><a href="javascript:download('/chat/download?link=${file.link}&id=${file.id}')">下载</a></td>
+				<td><a href="javascript:download('/chat/download?file=${file})')">下载</a></td>
 				<td>${file.count}</td>
 			</tr>
 		</c:forEach>

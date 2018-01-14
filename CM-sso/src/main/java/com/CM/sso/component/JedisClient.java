@@ -6,6 +6,7 @@ public interface JedisClient
 	public String set(String key,String value);
 	//查
 	public String get(String key);
+	public Long del(String key);
 	public Long hset(String key,String item,String value);
 	public String hget(String key,String item);
 	public Long incr(String key);
