@@ -29,7 +29,7 @@
 	<property name="configLocation" value="classpath:mybatis/SqlMapConfig.xml" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.CM.solr.mapper" />
+		<property name="basePackage" value="com.CM.mapper" />
 	</bean>
 </beans>
 		

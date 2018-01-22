@@ -12,6 +12,8 @@ import com.taotao.common.utils.HttpClientUtil;
 @Service
 public class LoginServiceImpl implements LoginService
 {
+	@Value("${SSO_BASE_URL}")
+	private String SSO_BASE_URL;
 	@Value("${SSO_LOGINOUT_URL}")
 	private String SSO_LOGINOUT_URL;
 	@Override
@@ -20,7 +22,7 @@ public class LoginServiceImpl implements LoginService
 		//向sso发送下线
 		Map<String, String> param = new HashMap<String, String>();
 		param.put("userId", userId);
-		String json = HttpClientUtil.doGet(SSO_LOGINOUT_URL, param);
+		String json = HttpClientUtil.doGet(SSO_BASE_URL+SSO_LOGINOUT_URL, param);
 		CMResult result = CMResult.format(json);
 		return result;
 	}

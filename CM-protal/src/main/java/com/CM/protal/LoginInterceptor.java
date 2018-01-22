@@ -17,6 +17,8 @@ import com.taotao.common.utils.JsonUtils;
 
 public class LoginInterceptor implements HandlerInterceptor
 {
+	@Value("${SSO_BASE_URL}")
+	private String SSO_BASE_URL;
 	@Value("${SSO_LOGIN_URL}")
 	private String SSO_LOGIN_URL;
 	@Autowired
@@ -28,7 +30,7 @@ public class LoginInterceptor implements HandlerInterceptor
 		String CM_TOKEN = CookieUtils.getCookieValue(request, "CM_TOKEN");
 		if(CM_TOKEN == null)
 		{
-			response.sendRedirect(SSO_LOGIN_URL+"?redirect="+getUrl(request));
+			response.sendRedirect(SSO_BASE_URL+SSO_LOGIN_URL+"?redirect="+getUrl(request));
 			return false;
 		}
 		else
@@ -37,7 +39,7 @@ public class LoginInterceptor implements HandlerInterceptor
 			User user = JsonUtils.jsonToPojo(json, User.class);
 			if(user == null)
 			{
-				response.sendRedirect(SSO_LOGIN_URL+"?redirect="+getUrl(request));
+				response.sendRedirect(SSO_BASE_URL+SSO_LOGIN_URL+"?redirect="+getUrl(request));
 				return false;
 			}
 			else

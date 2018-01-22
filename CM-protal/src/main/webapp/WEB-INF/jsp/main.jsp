@@ -1,6 +1,5 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; UTF-8">
@@ -65,10 +64,10 @@ $(function(){
 var userIdc;
 var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之语聊天室，请遵守聊天室规则，不要使用不文明用语。</span><br><span style='line-height:22px;'>";var sysBBS = "<span style='font-size:14px; line-height:30px;'>欢迎光临心之语聊天室，请遵守聊天室规则，不要使用不文明用语。</span><br><span style='line-height:22px;'>";
 	//更新信息
-	window.setInterval("showAllContent();",1000);
-	window.setInterval("showPersonContent();",1000);
-	window.setInterval("showOnLine();",2000);
-	window.setInterval("check();",5000);
+	//window.setInterval("showAllContent();",1000);
+	//window.setInterval("showPersonContent();",1000);
+	//window.setInterval("showOnLine();",1000);
+	//window.setInterval("check();",5000);
 
 	$(function(){
 		showAllContent();
@@ -346,33 +345,17 @@ function menuHandler(item){
 	                <input name="Submit2" type="button" class="btn_grey" value="发送" onClick="send()">
 				    <input name="button_exit" type="button" class="btn_grey" value="退出聊天室" onClick="exit()">
 	            	 <a href="javascript:void(0)" class="easyui-linkbutton fileUpload">上传文件</a>
+	            	  <a href="http://localhost:8082/file/showlistPage"  target="_blank" class="easyui-linkbutton">文件列表</a>
 	                 <input type="hidden" name="image"/>
 	            </td>
 	        </tr>
 		</table>
 	</form>
-	<div>
-		<input type='text' id="query"/>
-		<input type='button' onclick="search()"/>
-	</div>
-	<table align="center" border='1px'>
-		<tr>
-			<th width="200px">文件名</th>
-			<th width="300px">文件下载地址</th>
-			<th>下载</th>
-			<th>文件下载次数</th>
-		</tr>
-		<c:forEach items="${fileList}" var='file'>
-			<tr>
-				<td align="center">${file.name}</td>
-				<td align="center">${file.link}</td>
-				<td><a href="javascript:download('/chat/download?file=${file})')">下载</a></td>
-				<td>${file.count}</td>
-			</tr>
-		</c:forEach>
-	</table>
 	<div  align="center" class="word_dark">
 			CopyRights reserved 2018
 	</div>
 </body>	
+<script type="text/javascript">
+
+</script>
 </html>
